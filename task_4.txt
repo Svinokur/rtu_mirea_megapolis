@@ -1,0 +1,45 @@
+python
+
+import csv
+
+errors = []
+characters_errs = []
+with open('game.csv', encoding='utf-8') as file:
+    data = list(csv.reader(file))[1:]
+    for game_name, characters, name_error, date in data:
+
+        all_games = [e.get('game_name') for e in errors]
+        if game_name in all_games:
+            continue
+
+        errors_csv = [d for d in data if d[0] == game_name]
+        characters_errs = []
+        for error_csv in errors_csv:
+            characters_errs.append(dict(character=error_csv[1], error = error_csv[2]))
+
+        errors.append(dict(
+            game_name=game_name,
+            total_errors = len(errors_csv),
+            characters = characters_errs,
+        ))
+
+message = ''
+msgs = []
+with open('game_analysis.txt', "w+", encoding='utf-8') as file:
+    for game in errors:
+        if game.get('game_name') in message:
+            continue
+
+        errors_by_character = []
+        game_name = game.get('game_name')
+        total_errors = game.get('total_errors')
+        characters = game.get('characters')
+        message = f'\rGame {game_name}:\r Total errors: {total_errors}\r'
+
+        for chc in characters:
+            errors_by_character = [d.get('error') for d in characters if d.get('character') == chc.get('character')]
+            message += f" Character {chc.get('character')}:\r"
+            for err in errors_by_character:
+                message += f"  - {err}\r"
+
+        file.write(message)

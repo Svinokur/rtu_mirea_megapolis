@@ -1,0 +1,19 @@
+python
+
+import csv
+
+msgs = []
+with open('game.csv', encoding='utf-8') as file:
+    data = list(csv.reader(file))[1:]
+    for game_name, characters, name_error, date in data:
+        if characters == 'Avery':
+            message = f'У персонажа {characters} в игре {game_name} нашлась ошибка с кодом: {name_error}. Дата фиксации: {date}'
+            msgs.append(message)
+
+with open('game_new.txt', 'w+', encoding='utf-8') as file_strs:
+    for msg in msgs:
+        file_strs.write(msg + '\n')
+
+first_game = msg.split('в игре ')[1].split(' нашлась ошибка')[0]
+with open('avery.txt', 'w+', encoding='utf-8') as file_avery:
+    file_avery.write(first_game)
